@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Desafío de Genios — Banco de preguntas</title>
+<meta name="description" content="Escribe tus propias preguntas y respuestas y practica con fichas al azar. Todo se guarda solo en este dispositivo.">
+<meta name="theme-color" content="#12152A">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F0C878'/%3E%3Cstop offset='1' stop-color='%23C9852A'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='url(%23g)'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Georgia,serif' font-size='26' font-weight='700' fill='%23241705'%3EDG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div class="grain" aria-hidden="true"></div>
+<div id="srStatus" class="sr-only" aria-live="polite"></div>
+
+<div class="page">
+
+  <header class="hero">
+    <span class="monogram" aria-hidden="true">DG</span>
+    <h1>Desafío de Genios</h1>
+    <p class="subtitle">Escribe tus propias preguntas con su respuesta y practica sacando fichas al azar.</p>
+    <p class="device-pill">
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      Se guardan solo en este dispositivo
+    </p>
+  </header>
+
+  <p class="notice" id="storageWarning" role="alert" hidden>
+    Este navegador no está permitiendo guardar datos (puede ser el modo incógnito). Lo que agregues se perderá al cerrar la página.
+  </p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab" role="tab" type="button" id="tab-practicar" data-tab="practicar" aria-controls="panel-practicar" aria-selected="true">
+      Practicar
+    </button>
+    <button class="tab" role="tab" type="button" id="tab-preguntas" data-tab="preguntas" aria-controls="panel-preguntas" aria-selected="false" tabindex="-1">
+      Mis preguntas <span class="tab-count" id="tabCount">0</span>
+    </button>
+  </div>
+
+  <main id="main">
+
+    <!-- ================= PRACTICAR ================= -->
+    <section class="panel panel-practice" id="panel-practicar" role="tabpanel" aria-labelledby="tab-practicar" tabindex="-1">
+
+      <div class="empty" id="practiceEmpty" hidden>
+        <span class="empty-ball" aria-hidden="true">?</span>
+        <h2>Todavía no hay fichas</h2>
+        <p>Agrega tu primera pregunta con su respuesta y aparecerá aquí como ficha para practicar.</p>
+        <button class="btn btn-primary" type="button" data-goto="preguntas">Agregar preguntas</button>
+      </div>
+
+      <div class="practice" id="practiceArea">
+
+        <div class="filters" id="filters" role="group" aria-label="Filtrar por materia" hidden></div>
+
+        <div class="progress-row">
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+          <span class="progress-label" id="progressLabel">0 de 0 vistas</span>
+          <div class="progress-actions">
+            <button class="pill-btn" id="speechBtn" type="button" aria-pressed="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16.4 8.6a5 5 0 0 1 0 6.8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M19 6.2a9 9 0 0 1 0 11.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".55"/></svg>
+              <span id="speechBtnLabel">Voz activada</span>
+            </button>
+            <button class="pill-btn" id="resetBtn" type="button">Reiniciar</button>
+          </div>
+        </div>
+
+        <article class="ficha" id="ficha" aria-labelledby="questionText">
+          <div class="ficha-top">
+            <span class="ball" id="ballNumber" aria-hidden="true">01</span>
+            <span class="cat-name" id="catName">General</span>
+            <button class="icon-btn ficha-edit" id="editCurrentBtn" type="button" aria-label="Editar esta pregunta">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+            </button>
+          </div>
+          <h2 class="question" id="questionText"></h2>
+          <button class="reveal-btn" id="revealBtn" type="button" aria-expanded="false" aria-controls="answerWrap">Ver respuesta</button>
+          <div class="answer-wrap" id="answerWrap">
+            <div class="answer-inner">
+              <div class="answer-inner-pad">
+                <span class="answer-label">Respuesta</span>
+                <p class="answer-text" id="answerText"></p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="controls">
+          <button class="btn btn-secondary" id="backBtn" type="button" aria-label="Ficha anterior" disabled>
+            <span class="arrow" aria-hidden="true">←</span><span class="btn-secondary-label">Anterior</span>
+          </button>
+          <button class="btn btn-primary btn-next" id="drawBtn" type="button">
+            Siguiente pregunta <span class="arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="deck-complete" id="deckComplete" role="status" hidden>
+          <p>Ya viste todas las fichas de esta selección.</p>
+          <button class="btn btn-ghost" id="shuffleBtn" type="button">Barajar de nuevo</button>
+        </div>
+
+        <p class="kbd-hint">
+          <kbd>Espacio</kbd> muestra la respuesta, <kbd>←</kbd> <kbd>→</kbd> cambian de ficha
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= MIS PREGUNTAS ================= -->
+    <section class="panel panel-manage" id="panel-preguntas" role="tabpanel" aria-labelledby="tab-preguntas" tabindex="-1" hidden>
+      <div class="manage-grid">
+
+        <form class="editor" id="editor" novalidate>
+          <div class="editor-head">
+            <h2 id="editorTitle">Nueva pregunta</h2>
+            <p class="editor-sub" id="editorSub">Se agrega a tu banco de este dispositivo.</p>
+          </div>
+
+          <div class="field">
+            <label for="fCat">Materia <span class="optional">opcional</span></label>
+            <input class="input" id="fCat" name="cat" type="text" list="catList" autocomplete="off" maxlength="40" placeholder="Ej. Ciencias, Historia, Lógica">
+            <datalist id="catList"></datalist>
+          </div>
+
+          <div class="field">
+            <label for="fQ">Pregunta</label>
+            <textarea class="input" id="fQ" name="q" rows="3" maxlength="600" required aria-describedby="fQError" placeholder="Escribe la pregunta tal como se va a leer"></textarea>
+            <p class="field-error" id="fQError" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="fA">Respuesta</label>
+            <textarea class="input" id="fA" name="a" rows="3" maxlength="1200" required aria-describedby="fAError" placeholder="Escribe la respuesta correcta"></textarea>
+            <p class="field-error" id="fAError" hidden></p>
+          </div>
+
+          <div class="editor-actions">
+            <button class="btn btn-primary" id="saveBtn" type="submit">Guardar pregunta</button>
+            <button class="btn btn-ghost" id="cancelEditBtn" type="button" hidden>Cancelar</button>
+          </div>
+          <p class="editor-tip"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> también guarda</p>
+        </form>
+
+        <section class="bank" aria-labelledby="bankTitle">
+          <div class="bank-head">
+            <h2 id="bankTitle">Tu banco <span class="bank-count" id="bankCount">0 preguntas</span></h2>
+            <div class="search">
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+              <input class="input" id="search" type="search" placeholder="Buscar pregunta, respuesta o materia" aria-label="Buscar en tus preguntas" autocomplete="off">
+            </div>
+          </div>
+
+          <ul class="bank-list" id="bankList" aria-label="Preguntas guardadas"></ul>
+          <p class="bank-empty" id="bankEmpty" hidden></p>
+
+          <div class="backup">
+            <h3>Copia de seguridad</h3>
+            <p>Tus preguntas no se suben a internet ni aparecen en otros dispositivos. Si se borran los datos del navegador, se pierden: descarga una copia de vez en cuando.</p>
+            <div class="backup-actions">
+              <button class="btn btn-ghost" id="exportBtn" type="button">Descargar copia</button>
+              <button class="btn btn-ghost" id="importBtn" type="button">Restaurar copia</button>
+              <input id="importInput" type="file" accept="application/json,.json" hidden>
+              <button class="btn btn-danger" id="clearAllBtn" type="button">Borrar todas</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Cada dispositivo tiene su propio banco de preguntas. Lo que escribas aquí no se comparte con nadie.</p>
+  </footer>
+
+</div>
+
+<dialog class="dialog" id="confirmDialog" aria-labelledby="dlgTitle" aria-describedby="dlgText">
+  <form method="dialog">
+    <h2 id="dlgTitle">¿Seguro?</h2>
+    <p id="dlgText"></p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" id="dlgCancel" value="cancel">Cancelar</button>
+      <button class="btn btn-danger-solid" id="dlgConfirm" value="confirm">Borrar</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" hidden>
+  <span id="toastText"></span>
+  <button class="toast-action" id="toastAction" type="button" hidden>Deshacer</button>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
